@@ -1,5 +1,5 @@
 function add(num1, num2){ 
-    return num1 + num2;
+    return (+num1) + (+num2);
 }
 
 function subtract(num1, num2){ 
@@ -34,9 +34,6 @@ function numCheck(element){
     return +element === +element;
 }
 
-function orderOfOperations(displayArray) { 
-   
-}
 
 function calculate(){ 
   
@@ -54,6 +51,66 @@ function calculate(){
         }); 
     }
 
+    function orderOfOperations(displayArray) { 
+
+        for(let i = 0; i < displayArray.length; i++){ 
+            let element = displayArray[i];
+            if(isOperator(element)){ 
+             let indexOfOperator = displayArray.indexOf(element);
+             switch(element){ 
+                 case "*": 
+                    let multResult = operate(displayArray[indexOfOperator - 1], element, displayArray[indexOfOperator + 1]); 
+                    displayArray.splice(indexOfOperator - 1, 3); 
+                    displayArray.splice(indexOfOperator - 1, 0, multResult);
+                    addToScreen(displayArray);
+                    i--;
+                    continue;
+
+                 case "÷": 
+                    let divideResult = operate(displayArray[indexOfOperator - 1], element, displayArray[indexOfOperator + 1]); 
+                    displayArray.splice(indexOfOperator - 1, 3); 
+                    displayArray.splice(indexOfOperator - 1, 0, divideResult);
+                    addToScreen(displayArray);
+                    i--;
+                    continue;
+             }
+         }
+        }
+
+        for(let i = 0; i < displayArray.length; i++){ 
+            let element = displayArray[i];
+            if(isOperator(element)){ 
+             let indexOfOperator = displayArray.indexOf(element);
+
+             switch(element){ 
+                 case "+": 
+                    let addResult = operate(displayArray[indexOfOperator - 1], element, displayArray[indexOfOperator + 1]); 
+                    displayArray.splice(indexOfOperator - 1, 3); 
+                    displayArray.splice(indexOfOperator - 1, 0, addResult);
+                    addToScreen(displayArray);
+                    i--;
+                    continue;
+
+                 case "-": 
+                    let subtractResult = operate(displayArray[indexOfOperator - 1], element, displayArray[indexOfOperator + 1]); 
+                    displayArray.splice(indexOfOperator - 1, 3); 
+                    displayArray.splice(indexOfOperator - 1, 0, subtractResult);
+                    addToScreen(displayArray);
+                    i--;
+                    continue;
+             }
+         }
+        }
+
+        addToScreen(displayArray);
+        return; 
+        // Plus and minus loop 
+     //    for(element in displayArray){ 
+     
+     //    }
+     
+     }
+     
     // Called from button event listener 
     function buttonPress() { 
         addToCalculations(buttonPressed, displayArray)
@@ -80,7 +137,7 @@ function calculate(){
 
     // Checks for operator
     function isOperator(element) { 
-        return(element == "+" || element == "-" || element == "*" || element == "&#247");
+        return(element == "+" || element == "-" || element == "*" || element == "÷");
     }
 
     // Executes operations 
@@ -91,7 +148,6 @@ function calculate(){
         //Chain the operations. 
         for(let i = 0; i < displayArray.length - 1; i++) { 
             result = operate(+displayArray[i], displayArray[i+1], +displayArray[i+2])
-            displayArray = displayArray.splice(i, 3); 
             i += 3;
 
         }
@@ -149,7 +205,7 @@ function calculate(){
                 return;
 
             case "=": 
-                executeEquation(displayArray);
+                orderOfOperations(displayArray);
                 return;
 
             case "Delete": 
