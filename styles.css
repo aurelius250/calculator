@@ -3,7 +3,7 @@
 }
 
 .screenDigits { 
-    
+
 }
 .button { 
     display:flex; 
@@ -20,6 +20,8 @@
 #calculatorScreen { 
     border: 2px black solid;
     display:flex; 
+    padding-left: 200px; 
+    padding-right: 200px; 
     align-items: center; 
     justify-content: center;
     margin-bottom: 30px;
@@ -32,6 +34,7 @@
     display:flex;
     margin-left: 500px; 
     margin-right:500px;
+    align-items: center; 
     flex-direction: column;
 }
 
