@@ -16,7 +16,7 @@ function divide(num1, num2) {
 }
 
 function operate(num1, operator, num2) { 
-    switch(operator) { 
+    switch (operator) { 
         case "+": 
             return add(num1, num2);
 
@@ -31,7 +31,10 @@ function operate(num1, operator, num2) {
     }
 }
 
-function numCheck(element) { 
+function numCheck(element) {  
+    if (element === ".") { 
+        return true; 
+    }
     return +element === +element;
 }
 
@@ -39,6 +42,8 @@ function calculate() {
   
     let displayArray = []; 
     const screen = document.getElementsByClassName("screenDigits")[0];   
+    addToScreen(displayArray);
+
     const allButtons = Array.from(document.querySelectorAll("button")); 
     let buttonPressed; 
 
@@ -46,38 +51,51 @@ function calculate() {
         allButtons[i].addEventListener("click", (e) => { 
         buttonPressed = e.target.textContent; 
         console.log(buttonPressed);
-        buttonPress();
+        buttonPress(); 
         }); 
     }
 
+
     function orderOfOperations(displayArray) { 
 
-        for(let i = 0; i < displayArray.length; i++){ 
+        for(let i = 0; i < displayArray.length; i++) { 
+
             let element = displayArray[i];
             let indexOfElement = displayArray.indexOf(element);
             let nextElementIndex = indexOfElement+1; 
             let prevElementIndex = indexOfElement-1;
             
              if(isOperator(element)) { 
+
                 if(!displayArray[i+1]) { 
                     displayArray.pop();
                     continue;
                 }
+
                 if(!displayArray[prevElementIndex]) { 
+
                    if(element == "-") { 
+
                        if(numCheck(displayArray[nextElementIndex])) { 
-                       displayArray[indexOfElement] = displayArray[nextElementIndex] * -1; 
-                       displayArray.splice(nextElementIndex, 1);
-                        } else { 
-                       displayArray.shift();
+                            displayArray[indexOfElement] = displayArray[nextElementIndex] * -1; 
+                            displayArray.splice(nextElementIndex, 1);
                         }
+                         
+                        else { 
+                        displayArray.shift();
+                        }
+
                     }
+
                 }
             
              switch(element) { 
                  case "*": 
-                    let multResult = operate(displayArray[prevElementIndex], element, displayArray[nextElementIndex]).toFixed(2); 
+                    let multResult = operate(displayArray[prevElementIndex], element, displayArray[nextElementIndex]); 
                     displayArray.splice(prevElementIndex, 3); 
+                    if(!Number.isInteger(multResult)){ 
+                        multResult = multResult.toFixed(2);
+                    }
                     displayArray.splice(prevElementIndex, 0, multResult);
                     addToScreen(displayArray);
                     i--;
@@ -90,7 +108,10 @@ function calculate() {
                         continue; 
                     }
 
-                let divideResult = operate(displayArray[prevElementIndex], element, displayArray[nextElementIndex]).toFixed(2); 
+                let divideResult = operate(displayArray[prevElementIndex], element, displayArray[nextElementIndex]); 
+                if(!Number.isInteger(divideResult)){ 
+                    divideResult = divideResult.toFixed(2);
+                }
                 displayArray.splice(prevElementIndex, 3); 
                 displayArray.splice(prevElementIndex, 0, divideResult);
                 addToScreen(displayArray);
@@ -161,19 +182,24 @@ function calculate() {
 
     // Resets memory/screen
     function clearScreen() { 
+
         displayArray.length = 0;
         screen.textContent = "";
         return;
+
     }
 
     calculate.clearScreen = clearScreen; 
 
     // Checks for operator
     function isOperator(element) { 
+
         return(element == "+" || element == "-" || element == "*" || element == "÷");
+
     }
    
     function deleteElement() { 
+
         const lastElement = displayArray[displayArray.length - 1]; 
         console.log("delete detected");
         
@@ -191,13 +217,19 @@ function calculate() {
 
             } 
 
-            if(displayArray.length == 1) { 
+            if (displayArray.length == 1) { 
+
                 clearScreen();
                 return;
-            } else { 
+
+            }
+            
+            else { 
+                
                 displayArray.splice(displayArray.length - 1, 1); 
                 addToScreen(displayArray);
                 return;
+
             }
 
         }
@@ -209,12 +241,35 @@ function calculate() {
         } 
            
     }
+
+    function decimalCombiner() { 
+        if (displayArray[displayArray.length - 1].split("").includes(".")){ 
+            return;
+        }
+        
+        if (displayArray.length == 0) { 
+            displayArray[0] = "."; 
+            return;
+        }
+        let prevElement = displayArray[displayArray.length - 1];
+        if (numCheck(prevElement)) { 
+                displayArray[displayArray.length - 1] += "."; 
+                addToScreen(displayArray);
+                return;
+        } 
+        else { 
+            displayArray.push(".");
+            addToScreen(displayArray);
+            return;
+        }
+    }
+            
     //Split function to smaller pieces. Dont repeat yourself. 
 
     function addToCalculations(buttonPressed, displayArray) { 
 
         if(displayArray.length == 0) { 
-            if(buttonPressed == "Delete"){ 
+            if(buttonPressed == "Delete") { 
                 return;
             }
             displayArray[0] = buttonPressed; 
@@ -227,6 +282,9 @@ function calculate() {
                 clearScreen(); 
                 return;
 
+            case ".": 
+                decimalCombiner(); 
+                return; 
             case "=": 
                 orderOfOperations(displayArray);
                 return;
