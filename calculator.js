@@ -1,44 +1,43 @@
-function add(num1, num2){ 
+function add(num1, num2) { 
     return (+num1) + (+num2);
 }
 
-function subtract(num1, num2){ 
+function subtract(num1, num2) { 
     return num1 - num2;
 }
 
-function multiply(num1, num2){ 
+function multiply(num1, num2) { 
     return num1 * num2; 
 }
 
-function divide(num1, num2){ 
+function divide(num1, num2) { 
     
     return num1 / num2; 
 }
 
-function operate(num1, operator, num2){ 
-    switch(operator){ 
+function operate(num1, operator, num2) { 
+    switch(operator) { 
         case "+": 
-        return add(num1, num2);
+            return add(num1, num2);
 
         case "-": 
-        return subtract(num1, num2); 
+            return subtract(num1, num2); 
 
         case "*": 
-        return multiply(num1, num2); 
+            return multiply(num1, num2); 
 
         case "÷": 
-        return divide(num1, num2);
+            return divide(num1, num2);
     }
 }
 
-function numCheck(element){ 
+function numCheck(element) { 
     return +element === +element;
 }
 
 
-function calculate(){ 
+function calculate() { 
   
-    
     let displayArray = []; 
     const screen = document.getElementsByClassName("screenDigits")[0];   
     const allButtons = Array.from(document.querySelectorAll("button")); 
@@ -85,7 +84,7 @@ function calculate(){
             
             
              if(isOperator(element)) { 
-                if(!displayArray[i+1]){ 
+                if(!displayArray[i+1]) { 
                     displayArray.pop();
                     continue;
                 }
@@ -95,10 +94,10 @@ function calculate(){
                        if(numCheck(displayArray[indexOfOperator + 1])) { 
                        displayArray[indexOfOperator] = displayArray[indexOfOperator + 1] * -1; 
                        displayArray.splice(indexOfOperator + 1, 1);
-                   } else { 
+                        } else { 
                        displayArray.shift();
-                   }
-                }
+                        }
+                    }
                 }
             
              switch(element) { 
@@ -111,39 +110,41 @@ function calculate(){
                     continue;
 
                  case "÷": 
-                    if(displayArray[indexOfOperator + 1] == 0){
+                    if(displayArray[indexOfOperator + 1] == 0) {
                         displayArray = ["Can't divide by 0 dumbass"];
                         clearScreen();
                         continue; 
                     }
 
-                    let divideResult = operate(displayArray[indexOfOperator - 1], element, displayArray[indexOfOperator + 1]).toFixed(2); 
-                    displayArray.splice(indexOfOperator - 1, 3); 
-                    displayArray.splice(indexOfOperator - 1, 0, divideResult);
-                    addToScreen(displayArray);
-                    i--;
-                    continue;
+                let divideResult = operate(displayArray[indexOfOperator - 1], element, displayArray[indexOfOperator + 1]).toFixed(2); 
+                displayArray.splice(indexOfOperator - 1, 3); 
+                displayArray.splice(indexOfOperator - 1, 0, divideResult);
+                addToScreen(displayArray);
+                i--;
+                continue;
              }
          }
         }
 
-        for(let i = 0; i < displayArray.length; i++){ 
+        for(let i = 0; i < displayArray.length; i++) { 
             let element = displayArray[i];
-            if(isOperator(element)){ 
+
+            if(isOperator(element)) { 
              let indexOfOperator = displayArray.indexOf(element);
+
              if(!displayArray[indexOfOperator - 1]) { 
                 if(element == "-") { 
                     if(numCheck(displayArray[indexOfOperator + 1])) { 
                     displayArray[indexOfOperator] = displayArray[indexOfOperator + 1] * -1;
                     displayArray.splice(indexOfOperator + 1, 1);
 
-                } else{ 
+                    } else { 
                     displayArray.shift();
+                    }
                 }
              }
-             }
 
-                switch(element){ 
+                switch(element) { 
                     case "+": 
                         let addResult = operate(displayArray[indexOfOperator - 1], element, displayArray[indexOfOperator + 1]); 
                         displayArray.splice(indexOfOperator - 1, 3); 
@@ -205,31 +206,35 @@ function calculate(){
         const lastElement = displayArray[displayArray.length - 1]; 
         console.log("delete detected");
         
-        if(displayArray.length == 1) { 
-            clearScreen();
-        }
-
+        
         if(numCheck(lastElement)) { 
 
-            if(displayArray[displayArray.length - 1].split("").length > 2) { 
+            if(lastElement.split("").length > 1) { 
 
                 let toDelete = displayArray[displayArray.length - 1];
                 let splittedDelete = toDelete.split("");
                 splittedDelete.splice(splittedDelete.length - 1, 1);
                 displayArray[displayArray.length - 1] = splittedDelete.join("");
+                addToScreen(displayArray);
+                return;
 
             } 
-
-            else { 
+            if(displayArray.length == 1) { 
+                clearScreen();
+                return;
+            } else { 
                 displayArray.splice(displayArray.length - 1, 1); 
-            } 
-
+                addToScreen(displayArray);
+                return;
+            }
         }
+
         else { 
             displayArray.splice(displayArray.length - 1, 1); 
-         }
             addToScreen(displayArray);
             return;
+        } 
+           
     }
     //Split function to smaller pieces. Dont repeat yourself. 
 
