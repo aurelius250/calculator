@@ -35,7 +35,6 @@ function numCheck(element) {
     return +element === +element;
 }
 
-
 function calculate() { 
   
     let displayArray = []; 
@@ -51,49 +50,24 @@ function calculate() {
         }); 
     }
 
-    // function executeEquation(displayArray, element) { 
-    //     let result = operate(displayArray[indexOfOperator - 1], element, displayArray[indexOfOperator + 1]); 
-    //     displayArray.splice(indexOfOperator - 1, 3); 
-    //     displayArray.splice(indexOfOperator - 1, 0, multResult);
-    //     addToScreen(displayArray);
-    //     i--;
-    //     continue;
-    // }
-
     function orderOfOperations(displayArray) { 
-
-        // if(displayArray.length < 3){ 
-        //     for(let element of displayArray){ 
-        //         let numberCount = 0; 
-        //         if(numCheck(element)){ 
-        //             numberCount++;
-        //             displayArray = []; 
-        //             displayArray.push(element);
-        //             addToScreen(displayArray); 
-        //             return; 
-        //         } 
-        //     }
-        //     if(displayArray.length > 0){ 
-        //         clearScreen();
-        //         return; 
-        //     }
-        // }
 
         for(let i = 0; i < displayArray.length; i++){ 
             let element = displayArray[i];
-            
+            let indexOfElement = displayArray.indexOf(element);
+            let nextElementIndex = indexOfElement+1; 
+            let prevElementIndex = indexOfElement-1;
             
              if(isOperator(element)) { 
                 if(!displayArray[i+1]) { 
                     displayArray.pop();
                     continue;
                 }
-                let indexOfOperator = displayArray.indexOf(element);
-                if(!displayArray[indexOfOperator - 1]) { 
+                if(!displayArray[prevElementIndex]) { 
                    if(element == "-") { 
-                       if(numCheck(displayArray[indexOfOperator + 1])) { 
-                       displayArray[indexOfOperator] = displayArray[indexOfOperator + 1] * -1; 
-                       displayArray.splice(indexOfOperator + 1, 1);
+                       if(numCheck(displayArray[nextElementIndex])) { 
+                       displayArray[indexOfElement] = displayArray[nextElementIndex] * -1; 
+                       displayArray.splice(nextElementIndex, 1);
                         } else { 
                        displayArray.shift();
                         }
@@ -102,23 +76,23 @@ function calculate() {
             
              switch(element) { 
                  case "*": 
-                    let multResult = operate(displayArray[indexOfOperator - 1], element, displayArray[indexOfOperator + 1]).toFixed(2); 
-                    displayArray.splice(indexOfOperator - 1, 3); 
-                    displayArray.splice(indexOfOperator - 1, 0, multResult);
+                    let multResult = operate(displayArray[prevElementIndex], element, displayArray[nextElementIndex]).toFixed(2); 
+                    displayArray.splice(prevElementIndex, 3); 
+                    displayArray.splice(prevElementIndex, 0, multResult);
                     addToScreen(displayArray);
                     i--;
                     continue;
 
                  case "÷": 
-                    if(displayArray[indexOfOperator + 1] == 0) {
+                    if(displayArray[nextElementIndex] == 0) {
                         displayArray = ["Can't divide by 0 dumbass"];
                         clearScreen();
                         continue; 
                     }
 
-                let divideResult = operate(displayArray[indexOfOperator - 1], element, displayArray[indexOfOperator + 1]).toFixed(2); 
-                displayArray.splice(indexOfOperator - 1, 3); 
-                displayArray.splice(indexOfOperator - 1, 0, divideResult);
+                let divideResult = operate(displayArray[prevElementIndex], element, displayArray[nextElementIndex]).toFixed(2); 
+                displayArray.splice(prevElementIndex, 3); 
+                displayArray.splice(prevElementIndex, 0, divideResult);
                 addToScreen(displayArray);
                 i--;
                 continue;
@@ -128,15 +102,17 @@ function calculate() {
 
         for(let i = 0; i < displayArray.length; i++) { 
             let element = displayArray[i];
+            let indexOfElement = displayArray.indexOf(element);
+            let prevElementIndex = indexOfElement - 1; 
+            let nextElementIndex = indexOfElement + 1; 
 
             if(isOperator(element)) { 
-             let indexOfOperator = displayArray.indexOf(element);
-
-             if(!displayArray[indexOfOperator - 1]) { 
+       
+             if(!displayArray[prevElementIndex]) { 
                 if(element == "-") { 
-                    if(numCheck(displayArray[indexOfOperator + 1])) { 
-                    displayArray[indexOfOperator] = displayArray[indexOfOperator + 1] * -1;
-                    displayArray.splice(indexOfOperator + 1, 1);
+                    if(numCheck(nextElementIndex)) { 
+                    displayArray[indexOfElement] = displayArray[nextElementIndex] * -1;
+                    displayArray.splice(nextElementIndex, 1);
 
                     } else { 
                     displayArray.shift();
@@ -146,17 +122,17 @@ function calculate() {
 
                 switch(element) { 
                     case "+": 
-                        let addResult = operate(displayArray[indexOfOperator - 1], element, displayArray[indexOfOperator + 1]); 
-                        displayArray.splice(indexOfOperator - 1, 3); 
-                        displayArray.splice(indexOfOperator - 1, 0, addResult);
+                        let addResult = operate(displayArray[prevElementIndex], element, displayArray[nextElementIndex]); 
+                        displayArray.splice(prevElementIndex, 3); 
+                        displayArray.splice(prevElementIndex, 0, addResult);
                         addToScreen(displayArray);
                         i--;
                         continue;
 
                     case "-": 
-                        let subtractResult = operate(displayArray[indexOfOperator - 1], element, displayArray[indexOfOperator + 1]); 
-                        displayArray.splice(indexOfOperator - 1, 3); 
-                        displayArray.splice(indexOfOperator - 1, 0, subtractResult);
+                        let subtractResult = operate(displayArray[prevElementIndex], element, displayArray[nextElementIndex]); 
+                        displayArray.splice(prevElementIndex, 3); 
+                        displayArray.splice(prevElementIndex, 0, subtractResult);
                         addToScreen(displayArray);
                         i--;
                         continue;
@@ -166,11 +142,6 @@ function calculate() {
 
         addToScreen(displayArray);
         return; 
-        // Plus and minus loop 
-     //    for(element in displayArray){ 
-     
-     //    }
-     
      }
      
     // Called from button event listener 
@@ -219,6 +190,7 @@ function calculate() {
                 return;
 
             } 
+
             if(displayArray.length == 1) { 
                 clearScreen();
                 return;
@@ -227,6 +199,7 @@ function calculate() {
                 addToScreen(displayArray);
                 return;
             }
+
         }
 
         else { 
