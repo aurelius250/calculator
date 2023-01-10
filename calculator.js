@@ -51,15 +51,44 @@ function calculate(){
         }); 
     }
 
+    // function executeEquation(displayArray, element) { 
+    //     let result = operate(displayArray[indexOfOperator - 1], element, displayArray[indexOfOperator + 1]); 
+    //     displayArray.splice(indexOfOperator - 1, 3); 
+    //     displayArray.splice(indexOfOperator - 1, 0, multResult);
+    //     addToScreen(displayArray);
+    //     i--;
+    //     continue;
+    // }
+
     function orderOfOperations(displayArray) { 
+
+        if(displayArray.length < 3){ 
+            for(let element of displayArray){ 
+                let numberCount = 0; 
+                if(numCheck(element)){ 
+                    numberCount++;
+                    displayArray = []; 
+                    displayArray.push(element);
+                    addToScreen(displayArray); 
+                    return; 
+                } 
+            }
+            if(displayArray.length > 0){ 
+                clearScreen();
+                return; 
+            }
+        }
 
         for(let i = 0; i < displayArray.length; i++){ 
             let element = displayArray[i];
             if(isOperator(element)){ 
              let indexOfOperator = displayArray.indexOf(element);
+             if(!displayArray[indexOfOperator - 1]){ 
+                continue; 
+             }
              switch(element){ 
                  case "*": 
-                    let multResult = operate(displayArray[indexOfOperator - 1], element, displayArray[indexOfOperator + 1]); 
+                    let multResult = operate(displayArray[indexOfOperator - 1], element, displayArray[indexOfOperator + 1]).toFixed(2); 
                     displayArray.splice(indexOfOperator - 1, 3); 
                     displayArray.splice(indexOfOperator - 1, 0, multResult);
                     addToScreen(displayArray);
@@ -67,7 +96,7 @@ function calculate(){
                     continue;
 
                  case "÷": 
-                    let divideResult = operate(displayArray[indexOfOperator - 1], element, displayArray[indexOfOperator + 1]); 
+                    let divideResult = operate(displayArray[indexOfOperator - 1], element, displayArray[indexOfOperator + 1]).toFixed(2); 
                     displayArray.splice(indexOfOperator - 1, 3); 
                     displayArray.splice(indexOfOperator - 1, 0, divideResult);
                     addToScreen(displayArray);
@@ -80,8 +109,12 @@ function calculate(){
         for(let i = 0; i < displayArray.length; i++){ 
             let element = displayArray[i];
             if(isOperator(element)){ 
-             let indexOfOperator = displayArray.indexOf(element);
 
+             let indexOfOperator = displayArray.indexOf(element);
+             if(!displayArray[indexOfOperator - 1]){ 
+                continue; 
+             }
+             
              switch(element){ 
                  case "+": 
                     let addResult = operate(displayArray[indexOfOperator - 1], element, displayArray[indexOfOperator + 1]); 
@@ -139,22 +172,6 @@ function calculate(){
     function isOperator(element) { 
         return(element == "+" || element == "-" || element == "*" || element == "÷");
     }
-
-    // Executes operations 
-    function executeEquation(displayArray) { 
-        clearScreen();
-        let result = 0;
-
-        //Chain the operations. 
-        for(let i = 0; i < displayArray.length - 1; i++) { 
-            result = operate(+displayArray[i], displayArray[i+1], +displayArray[i+2])
-            i += 3;
-
-        }
-
-        addToScreen(displayArray);
-    }
-
    
     function deleteElement() { 
         const lastElement = displayArray[displayArray.length - 1]; 
