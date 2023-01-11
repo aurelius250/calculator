@@ -44,7 +44,65 @@ function calculate() {
     const screen = document.getElementsByClassName("screenDigits")[0];   
     const allButtons = Array.from(document.querySelectorAll("button")); 
     let buttonPressed; 
+    let kbListener = document.addEventListener("keypress", function(e) { 
+        buttonPressed = e.key.toString();
+        alert(buttonPressed);
 
+        switch(e.key){ 
+            case "*":
+                buttonPress();
+                return;
+            case "+": 
+                buttonPress();
+                return;
+            case "/": 
+                alert(buttonPressed);
+                buttonPressed = "÷";
+                buttonPress();
+                return;
+            case "-": 
+                buttonPress();
+                return;   
+
+            case "=": 
+                buttonPress();
+                return;   
+
+            case "0":
+                buttonPress();
+                return;
+            case "1":
+                buttonPress();
+                return;
+            case "2":
+                buttonPress();
+                return;
+            case "3":
+                buttonPress();
+                return;
+            case "4":
+                buttonPress();
+                return;
+            case "5":
+                buttonPress();``
+                return;
+            case "6":
+                buttonPress();
+                return;
+            case "7":
+                buttonPress();
+                return;
+            case "8":
+                buttonPress();
+                return;
+            case "9":
+                buttonPress();
+                return;
+           
+
+
+        }
+    })
     for (let i = 0; i <= allButtons.length - 1; i++) { 
         allButtons[i].addEventListener("click", (e) => { 
         buttonPressed = e.target.textContent; 
@@ -168,7 +226,6 @@ function calculate() {
      
     // Called from button event listener 
     function buttonPress() { 
-
         addToCalculations(buttonPressed, displayArray);
 
     }
