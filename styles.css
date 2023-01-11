@@ -73,9 +73,11 @@ body {
     box-shadow: 0 1px 6px rgba(0, 0, 0, 0.12), 0 1px 4px rgba(0, 0, 0, 0.24);
     border: solid 1px;
 }
+
 a { 
  text-decoration: none;
 }
+
 #calculatorScreen { 
     display:inline-block;
     border-radius: 7px;

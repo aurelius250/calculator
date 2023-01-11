@@ -42,11 +42,10 @@ function calculate() {
   
     let displayArray = []; 
     const screen = document.getElementsByClassName("screenDigits")[0];   
-
     const allButtons = Array.from(document.querySelectorAll("button")); 
     let buttonPressed; 
 
-    for(let i = 0; i <= allButtons.length - 1; i++) { 
+    for (let i = 0; i <= allButtons.length - 1; i++) { 
         allButtons[i].addEventListener("click", (e) => { 
         buttonPressed = e.target.textContent; 
         console.log(buttonPressed);
@@ -56,25 +55,25 @@ function calculate() {
 
     function orderOfOperations(displayArray) { 
 
-        for(let i = 0; i < displayArray.length; i++) { 
+        for (let i = 0; i < displayArray.length; i++) { 
 
             let element = displayArray[i];
             let indexOfElement = displayArray.indexOf(element);
             let nextElementIndex = indexOfElement+1; 
             let prevElementIndex = indexOfElement-1;
             
-             if(isOperator(element)) { 
+             if (isOperator(element)) { 
 
-                if(!displayArray[i+1]) { 
+                if (!displayArray[i+1]) { 
                     displayArray.pop();
                     continue;
                 }
 
-                if(!numCheck(displayArray[i-1])){ 
+                if (!numCheck(displayArray[i-1])){ 
                     displayArray.shift();
                     continue;
                 }
-                if(!displayArray[prevElementIndex]) { 
+                if (!displayArray[prevElementIndex]) { 
 
                    if(element == "-") { 
 
@@ -170,7 +169,8 @@ function calculate() {
     // Called from button event listener 
     function buttonPress() { 
 
-        addToCalculations(buttonPressed, displayArray)
+        addToCalculations(buttonPressed, displayArray);
+
     }
     
     // Clears screen, replaces with updated array of operands 
@@ -180,15 +180,17 @@ function calculate() {
         for(operand of displayArray) { 
             screen.textContent += operand.toString() + " ";
         }
+
         console.log(displayArray);
     } 
 
     // Resets memory/screen
     function clearScreen() { 
+
         displayArray.length = 0;
         screen.textContent = "";
         return;
-
+    
     }
 
     calculate.clearScreen = clearScreen; 
@@ -205,33 +207,26 @@ function calculate() {
         const lastElement = displayArray[displayArray.length - 1]; 
         console.log("delete detected");
         
-        
         if(numCheck(lastElement)) { 
 
             if(lastElement.split("").length > 1) { 
-
                 let toDelete = displayArray[displayArray.length - 1];
                 let splittedDelete = toDelete.split("");
                 splittedDelete.splice(splittedDelete.length - 1, 1);
                 displayArray[displayArray.length - 1] = splittedDelete.join("");
                 addToScreen(displayArray);
                 return;
-
             } 
 
             if (displayArray.length == 1) { 
-
                 clearScreen();
                 return;
-
             }
             
             else { 
-                
                 displayArray.splice(displayArray.length - 1, 1); 
                 addToScreen(displayArray);
                 return;
-
             }
 
         }
@@ -253,6 +248,7 @@ function calculate() {
             displayArray[0] = "."; 
             return;
         }
+
         let prevElement = displayArray[displayArray.length - 1];
         if (numCheck(prevElement)) { 
                 displayArray[displayArray.length - 1] += "."; 
@@ -270,10 +266,10 @@ function calculate() {
 
     function addToCalculations(buttonPressed, displayArray) { 
 
-        if(buttonPressed == "Spc"){ 
+        if(buttonPressed == "Spc") { 
             return;
         }
-        
+
         if(displayArray.length == 0) { 
             if(buttonPressed == "Del" || buttonPressed == "CA") { 
                 return;
