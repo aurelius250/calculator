@@ -42,7 +42,6 @@ function calculate() {
   
     let displayArray = []; 
     const screen = document.getElementsByClassName("screenDigits")[0];   
-    addToScreen(displayArray);
 
     const allButtons = Array.from(document.querySelectorAll("button")); 
     let buttonPressed; 
@@ -54,7 +53,6 @@ function calculate() {
         buttonPress(); 
         }); 
     }
-
 
     function orderOfOperations(displayArray) { 
 
@@ -72,6 +70,10 @@ function calculate() {
                     continue;
                 }
 
+                if(!numCheck(displayArray[i-1])){ 
+                    displayArray.shift();
+                    continue;
+                }
                 if(!displayArray[prevElementIndex]) { 
 
                    if(element == "-") { 
@@ -175,14 +177,13 @@ function calculate() {
         screen.textContent = "";
        
         for(operand of displayArray) { 
-            screen.textContent += operand.toString();
+            screen.textContent += operand.toString() + " ";
         }
         console.log(displayArray);
     } 
 
     // Resets memory/screen
     function clearScreen() { 
-
         displayArray.length = 0;
         screen.textContent = "";
         return;
@@ -269,7 +270,7 @@ function calculate() {
     function addToCalculations(buttonPressed, displayArray) { 
 
         if(displayArray.length == 0) { 
-            if(buttonPressed == "Delete") { 
+            if(buttonPressed == "Del" || buttonPressed == "CA") { 
                 return;
             }
             displayArray[0] = buttonPressed; 
@@ -278,7 +279,7 @@ function calculate() {
         }
 
         switch(buttonPressed) { 
-            case "Clear": 
+            case "CA": 
                 clearScreen(); 
                 return;
 
@@ -289,7 +290,7 @@ function calculate() {
                 orderOfOperations(displayArray);
                 return;
 
-            case "Delete": 
+            case "Del": 
                 deleteElement();
                 return;              
         }
