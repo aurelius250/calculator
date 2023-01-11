@@ -169,6 +169,7 @@ function calculate() {
      
     // Called from button event listener 
     function buttonPress() { 
+
         addToCalculations(buttonPressed, displayArray)
     }
     
@@ -269,6 +270,10 @@ function calculate() {
 
     function addToCalculations(buttonPressed, displayArray) { 
 
+        if(buttonPressed == "Spc"){ 
+            return;
+        }
+        
         if(displayArray.length == 0) { 
             if(buttonPressed == "Del" || buttonPressed == "CA") { 
                 return;
