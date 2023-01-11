@@ -44,10 +44,8 @@ function calculate() {
     const screen = document.getElementsByClassName("screenDigits")[0];   
     const allButtons = Array.from(document.querySelectorAll("button")); 
     let buttonPressed; 
-    let kbListener = document.addEventListener("keypress", function(e) { 
+    let kbListener = document.addEventListener("keydown", function(e) { 
         buttonPressed = e.key.toString();
-        alert(buttonPressed);
-
         switch(e.key){ 
             case "*":
                 buttonPress();
@@ -55,6 +53,11 @@ function calculate() {
             case "+": 
                 buttonPress();
                 return;
+            case "Backspace": 
+                buttonPressed = "Del";
+                buttonPress();
+                return;
+        
             case "/": 
                 alert(buttonPressed);
                 buttonPressed = "÷";
@@ -68,6 +71,10 @@ function calculate() {
                 buttonPress();
                 return;   
 
+            case "Enter": 
+                buttonPressed = "=";
+                buttonPress();
+                return;  
             case "0":
                 buttonPress();
                 return;
@@ -98,8 +105,6 @@ function calculate() {
             case "9":
                 buttonPress();
                 return;
-           
-
 
         }
     })
